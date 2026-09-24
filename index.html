@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="id" manifest="cache.appcache">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PLAYBOX SIDOARJO</title>
+<style>
+  :root {
+    --bg: #05070a;
+    --bg-2: #0a0d12;
+    --card: #0e1118;
+    --card-2: #131820;
+    --line: #1e2630;
+    --line-bright: #2e3846;
+    --text: #ffffff;
+    --muted: #8b95a3;
+    --dim: #5c6672;
+    --accent: #ff283c;
+    --accent-2: #ff6b7a;
+    --ok: #4ade80;
+    --warn: #fbbf24;
+    --bad: #ff4d5e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font: 15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+
+  body {
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(255, 40, 60, 0.12), transparent 42%),
+      radial-gradient(circle at 85% 90%, rgba(255, 0, 80, 0.10), transparent 42%),
+      radial-gradient(circle at 50% 50%, rgba(255, 60, 0, 0.06), transparent 60%),
+      linear-gradient(rgba(255, 40, 60, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 40, 60, 0.03) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Scanline effect (subtle) */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      rgba(255, 40, 60, 0.02) 0px,
+      rgba(255, 40, 60, 0.02) 1px,
+      transparent 1px,
+      transparent 3px
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ===== HEADER ===== */
+  #brand {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 14px 12px 12px;
+    background: rgba(8, 8, 12, 0.85);
+    border-bottom: 1px solid rgba(255, 40, 60, 0.35);
+    box-shadow: 0 0 32px rgba(255, 40, 60, 0.15);
+    flex-shrink: 0;
+  }
+  #brand-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  #brand img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    filter: drop-shadow(0 0 8px rgba(255, 40, 60, 0.7));
+    animation: logoPulse 3s ease-in-out infinite;
+  }
+  @keyframes logoPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 12px rgba(255, 40, 60, 0.5),
+        0 0 24px rgba(255, 40, 60, 0.2);
+    }
+    50% {
+      box-shadow:
+        0 0 20px rgba(255, 40, 60, 0.9),
+        0 0 40px rgba(255, 40, 60, 0.4);
+    }
+  }
+  #brand b {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: #ffffff;
+    text-shadow:
+      0 0 8px rgba(255, 40, 60, 0.9),
+      0 0 18px rgba(255, 40, 60, 0.5);
+  }
+  #brand .sub {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+  #brand::after {
+    content: "";
+    display: block;
+    height: 1px;
+    margin-top: 10px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 40, 60, 0.7) 50%,
+      transparent 100%
+    );
+  }
+
+  /* ===== MAIN ===== */
+  #wrap {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1 1 auto;
+    padding: 24px 18px;
+    min-height: 0;
+  }
+
+  /* ===== CARD ===== */
+  #card {
+    width: 100%;
+    max-width: 520px;
+    text-align: center;
+    border: 1px solid rgba(255, 40, 60, 0.35);
+    border-radius: 16px;
+    padding: 32px 24px 28px;
+    background: linear-gradient(
+      180deg,
+      rgba(14, 17, 24, 0.95) 0%,
+      rgba(10, 8, 12, 0.9) 100%
+    );
+    box-shadow:
+      0 0 0 1px rgba(255, 40, 60, 0.08) inset,
+      0 0 40px rgba(255, 40, 60, 0.15),
+      0 0 80px rgba(255, 40, 60, 0.06);
+    position: relative;
+    overflow: hidden;
+    animation: cardPulse 3s ease-in-out infinite;
+  }
+  #card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 40, 60, 0.9) 50%,
+      transparent 100%
+    );
+  }
+  @keyframes cardPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 0 1px rgba(255, 40, 60, 0.08) inset,
+        0 0 30px rgba(255, 40, 60, 0.12),
+        0 0 60px rgba(255, 40, 60, 0.05);
+    }
+    50% {
+      box-shadow:
+        0 0 0 1px rgba(255, 40, 60, 0.15) inset,
+        0 0 50px rgba(255, 40, 60, 0.25),
+        0 0 100px rgba(255, 40, 60, 0.10);
+    }
+  }
+
+  /* ===== SPINNER ===== */
+  .spinner {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 20px;
+    border: 4px solid rgba(255, 40, 60, 0.15);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+    filter: drop-shadow(0 0 10px rgba(255, 40, 60, 0.8));
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ===== STATE TEXT ===== */
+  #state {
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin: 0 0 10px;
+    color: #ffffff;
+    text-shadow:
+      0 0 8px rgba(255, 40, 60, 0.9),
+      0 0 20px rgba(255, 40, 60, 0.5);
+    animation: statePulse 2.4s ease-in-out infinite;
+    text-transform: uppercase;
+  }
+  @keyframes statePulse {
+    0%, 100% {
+      text-shadow:
+        0 0 8px rgba(255, 40, 60, 0.9),
+        0 0 20px rgba(255, 40, 60, 0.5);
+    }
+    50% {
+      text-shadow:
+        0 0 12px rgba(255, 40, 60, 1),
+        0 0 32px rgba(255, 40, 60, 0.8),
+        0 0 48px rgba(255, 40, 60, 0.4);
+    }
+  }
+
+  #det {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0 0 10px;
+    letter-spacing: 0.04em;
+  }
+  #det b {
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow:
+      0 0 8px rgba(255, 40, 60, 0.9),
+      0 0 16px rgba(255, 40, 60, 0.5);
+  }
+
+  #cache {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0;
+    min-height: 16px;
+    letter-spacing: 0.06em;
+  }
+  #cache.cacheok {
+    color: var(--accent-2);
+    text-shadow:
+      0 0 8px rgba(255, 40, 60, 0.9),
+      0 0 16px rgba(255, 40, 60, 0.5);
+  }
+
+  /* State colors */
+  #state.ok   { color: var(--ok);   text-shadow: 0 0 10px rgba(74, 222, 128, 0.9), 0 0 24px rgba(74, 222, 128, 0.5); }
+  #state.bad  { color: var(--bad);  text-shadow: 0 0 10px rgba(255, 77, 94, 1),   0 0 24px rgba(255, 77, 94, 0.7); }
+  #state.warn { color: var(--warn); text-shadow: 0 0 10px rgba(251, 191, 36, 1),  0 0 24px rgba(251, 191, 36, 0.7); }
+
+  /* ===== FOOTER ===== */
+  #footer {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 12px 14px 14px;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.6);
+    background: rgba(5, 7, 10, 0.85);
+    border-top: 1px solid rgba(255, 40, 60, 0.25);
+    flex-shrink: 0;
+  }
+  #footer b {
+    color: #ffffff;
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(255, 40, 60, 0.6);
+  }
+  #footer .row {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  #footer .sep {
+    color: rgba(255, 40, 60, 0.7);
+    margin: 0 5px;
+  }
+  #footer a {
+    color: #ffffff;
+    text-decoration: none;
+    border-bottom: 1px dotted rgba(255, 40, 60, 0.6);
+    text-shadow: 0 0 6px rgba(255, 40, 60, 0.5);
+    transition: color 0.2s, border-color 0.2s;
+  }
+  #footer a:hover {
+    color: var(--accent-2);
+    border-bottom-color: var(--accent-2);
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 560px), (max-height: 600px) {
+    #wrap { padding: 16px 12px; }
+    #card { padding: 24px 18px 20px; }
+    #state { font-size: 17px; }
+    .spinner { width: 46px; height: 46px; margin-bottom: 16px; }
+    #brand b { font-size: 16px; }
+    #brand img { width: 32px; height: 32px; }
+    #footer { font-size: 10px; padding: 8px 10px 10px; }
+    #footer .row { white-space: normal; }
+  }
+</style>
+</head>
+<body>
+
+<div id="brand">
+  <div id="brand-inner">
+    <img src="logo.png" alt="PlayBox Sidoarjo">
+    <div>
+      <b>WEBKIT PLAYBOX SIDOARJO</b>
+      <span class="sub">PS4 Host &middot; 13.02 - 13.52 &middot; GoldHEN 2.4B18.12</span>
+    </div>
+  </div>
+</div>
+
+<div id="wrap">
+  <div id="card">
+    <div class="spinner"></div>
+    <div id="state">detecting firmware...</div>
+    <div id="det"></div>
+    <div id="cache"></div>
+  </div>
+</div>
+
+<div id="footer">
+  <span class="row">
+    Author <b>&copy; 2026 playbox sidoarjo</b>
+    <span class="sep">·</span>
+    GoldHEN <b>v2.4b18.12</b>
+    <span class="sep">·</span>
+    Credit <b>raw13g</b>
+  </span>
+  <span class="row">
+    Kontak
+    <a href="https://wa.me/6285943796979">WA 085943796979</a>
+    <span class="sep">·</span>
+    TikTok <a href="https://www.tiktok.com/@playbox.sidoarjo">playbox.sidoarjo</a>
+    <span class="sep">·</span>
+    IG <a href="https://www.instagram.com/playbox.sidoarjo">playbox.sidoarjo</a>
+  </span>
+</div>
+
+<script>
+(function () {
+    var stateEl = document.getElementById("state");
+    var detEl = document.getElementById("det");
+    var cacheEl = document.getElementById("cache");
+    function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
+    function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
+    var params = new URLSearchParams(location.search);
+
+    // Firmwares this build has a MEASURED kernel table for. jb.js still runs its
+    // own kernel-table-present gate, so this is UX only -- an unlisted firmware
+    // can still be launched with a tap. KEEP IN SYNC with ps4_offsets.js: add a
+    // fwnum here in the SAME commit that fills that firmware's kernel RVAs.
+    // The PS4 reports its minor as two hex digits in the UA (13.52 -> minor 0x52).
+    var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 }; // all measured on hardware
+
+    var key = null, fwnum = null;
+    var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
+    if (m) {
+        var ms = parseInt(m[2], 16).toString(16);
+        if (ms.length < 2) ms = "0" + ms;
+        key = m[1] + "." + ms;
+        fwnum = parseInt(m[1], 10) * 100 + parseInt(ms, 10);
+    }
+
+    var forced = params.get("force") === "1";
+    var supported = forced || (fwnum !== null && SUPPORTED[fwnum] === 1);
+    detEl.innerHTML = "firmware <b>" + (key || "unknown") + "</b>"
+        + (supported ? " &middot; <b>supported</b>"
+                     : " &middot; not in this build's kernel table");
+
+    var target = "jb.html" + location.search;
+    function go() { setState("loading jailbreak...", "warn"); location.replace(target); }
+
+    function waitForTap(msg, action) {
+        setState(msg, "warn");
+        function fire() {
+            window.removeEventListener("click", fire);
+            window.removeEventListener("keydown", fire);
+            action();
+        }
+        window.addEventListener("click", fire);
+        window.addEventListener("keydown", fire);
+    }
+
+    // Off-target consoles are not launched automatically -- one tap still runs
+    // it, so a user-agent quirk on the real 13.52 console can never lock it out.
+    if (!supported) {
+        setState("UNSUPPORTED FIRMWARE", "bad");
+        waitForTap("UNSUPPORTED (" + (key || "unknown") + ") -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+        return;
+    }
+
+    var ac = window.applicationCache;
+    if (!ac || !document.documentElement.hasAttribute("manifest")) {
+        go();
+    } else if (!navigator.onLine) {
+        setCache("offline -- from cache", true);
+        go();
+    } else if (ac.status === ac.IDLE) {
+        setCache("cached", true);
+        go();
+    } else if (ac.status === ac.UPDATEREADY) {
+        try { ac.swapCache(); } catch (e) {}
+        setCache("update downloaded", true);
+        waitForTap("UPDATE READY -- Klik X Untuk Membuka Game Yang Terkunci..!",
+                   function () { location.reload(); });
+    } else {
+        setCache("checking cache...");
+        ac.addEventListener("downloading",
+            function () { setCache("caching for offline (first run)..."); }, false);
+        ac.addEventListener("progress", function (e) {
+            if (e && e.total)
+                setCache("caching " + Math.round((e.loaded / e.total) * 100) + "%");
+        }, false);
+        ac.addEventListener("cached", function () {
+            setCache("cached for offline use", true);
+            waitForTap("CACHED (first run) -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+        }, false);
+        ac.addEventListener("updateready", function () {
+            try { ac.swapCache(); } catch (e) {}
+            setCache("update downloaded", true);
+            waitForTap("UPDATE READY -- Klik X Untuk Membuka Game Yang Terkunci..!",
+                       function () { location.reload(); });
+        }, false);
+        ac.addEventListener("noupdate", function () {
+            setCache("cached -- offline ready", true);
+            go();
+        }, false);
+        ac.addEventListener("error", function () {
+            setCache("cache unavailable");
+            waitForTap("CACHE FAILED -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+        }, false);
+        ac.addEventListener("obsolete", function () {
+            setCache("cache obsolete");
+            waitForTap("CACHE OBSOLETE -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+        }, false);
+    }
+})();
+</script>
+
+</body>
+</html>
