@@ -7,16 +7,15 @@
 <style>
   :root {
     --bg: #05070a;
-    --bg-2: #0a0d12;
     --card: #0e1118;
-    --card-2: #131820;
     --line: #1e2630;
-    --line-bright: #2e3846;
     --text: #ffffff;
     --muted: #8b95a3;
     --dim: #5c6672;
     --accent: #ff283c;
     --accent-2: #ff6b7a;
+    --amber: #ff9f1c;
+    --amber-2: #ffb84d;
     --ok: #4ade80;
     --warn: #fbbf24;
     --bad: #ff4d5e;
@@ -33,34 +32,64 @@
     font: 15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
   }
 
+  /* ===== BACKGROUND LAYER ===== */
   body {
+    background-color: var(--bg);
     background-image:
-      radial-gradient(circle at 15% 10%, rgba(255, 40, 60, 0.12), transparent 42%),
-      radial-gradient(circle at 85% 90%, rgba(255, 0, 80, 0.10), transparent 42%),
-      radial-gradient(circle at 50% 50%, rgba(255, 60, 0, 0.06), transparent 60%),
-      linear-gradient(rgba(255, 40, 60, 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 40, 60, 0.03) 1px, transparent 1px);
-    background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+      /* Radial glow merah di 3 titik */
+      radial-gradient(ellipse 60% 50% at 15% 10%, rgba(255, 40, 60, 0.18), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 85% 90%, rgba(255, 0, 80, 0.15), transparent 60%),
+      radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 60, 0, 0.08), transparent 70%),
+      /* Grid pattern diagonal */
+      linear-gradient(rgba(255, 40, 60, 0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 40, 60, 0.04) 1px, transparent 1px),
+      /* Dot pattern */
+      radial-gradient(rgba(255, 40, 60, 0.08) 1px, transparent 1px);
+    background-size:
+      100% 100%,
+      100% 100%,
+      100% 100%,
+      60px 60px,
+      60px 60px,
+      20px 20px;
     background-attachment: fixed;
     display: flex;
     flex-direction: column;
     position: relative;
   }
 
-  /* Scanline effect (subtle) */
-  body::after {
+  /* Scanline halus (efek CRT) */
+  body::before {
     content: "";
     position: fixed;
     inset: 0;
     background: repeating-linear-gradient(
       0deg,
-      rgba(255, 40, 60, 0.02) 0px,
-      rgba(255, 40, 60, 0.02) 1px,
+      rgba(255, 40, 60, 0.025) 0px,
+      rgba(255, 40, 60, 0.025) 1px,
       transparent 1px,
       transparent 3px
     );
     pointer-events: none;
     z-index: 1;
+  }
+
+  /* Glow bergerak di background (animasi) */
+  body::after {
+    content: "";
+    position: fixed;
+    inset: -10%;
+    background:
+      radial-gradient(circle at 30% 40%, rgba(255, 40, 60, 0.15), transparent 30%),
+      radial-gradient(circle at 70% 60%, rgba(255, 0, 80, 0.12), transparent 30%);
+    pointer-events: none;
+    z-index: 0;
+    animation: bgMove 20s ease-in-out infinite alternate;
+  }
+  @keyframes bgMove {
+    0% { transform: translate(0, 0) scale(1); }
+    50% { transform: translate(3%, -2%) scale(1.05); }
+    100% { transform: translate(-2%, 3%) scale(1); }
   }
 
   a { color: inherit; text-decoration: none; }
@@ -75,6 +104,8 @@
     border-bottom: 1px solid rgba(255, 40, 60, 0.35);
     box-shadow: 0 0 32px rgba(255, 40, 60, 0.15);
     flex-shrink: 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   #brand-inner {
     display: inline-flex;
@@ -150,11 +181,11 @@
     text-align: center;
     border: 1px solid rgba(255, 40, 60, 0.35);
     border-radius: 16px;
-    padding: 32px 24px 28px;
+    padding: 36px 24px 32px;
     background: linear-gradient(
       180deg,
       rgba(14, 17, 24, 0.95) 0%,
-      rgba(10, 8, 12, 0.9) 100%
+      rgba(10, 8, 12, 0.92) 100%
     );
     box-shadow:
       0 0 0 1px rgba(255, 40, 60, 0.08) inset,
@@ -163,6 +194,8 @@
     position: relative;
     overflow: hidden;
     animation: cardPulse 3s ease-in-out infinite;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
   }
   #card::before {
     content: "";
@@ -176,6 +209,21 @@
       transparent 0%,
       rgba(255, 40, 60, 0.9) 50%,
       transparent 100%
+    );
+  }
+  /* Garis dekoratif di kiri & kanan card */
+  #card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 20%;
+    right: 20%;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 40, 60, 0.5),
+      transparent
     );
   }
   @keyframes cardPulse {
@@ -193,43 +241,64 @@
     }
   }
 
-  /* ===== SPINNER ===== */
-  .spinner {
-    width: 56px;
-    height: 56px;
-    margin: 0 auto 20px;
-    border: 4px solid rgba(255, 40, 60, 0.15);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.9s linear infinite;
-    filter: drop-shadow(0 0 10px rgba(255, 40, 60, 0.8));
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ===== STATE TEXT ===== */
+  /* ===== STATE TEXT (tanpa spinner) ===== */
   #state {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 800;
     letter-spacing: 0.08em;
-    margin: 0 0 10px;
-    color: #ffffff;
+    margin: 0 0 14px;
+    color: var(--amber);
     text-shadow:
-      0 0 8px rgba(255, 40, 60, 0.9),
-      0 0 20px rgba(255, 40, 60, 0.5);
+      0 0 8px rgba(255, 159, 28, 0.9),
+      0 0 20px rgba(255, 159, 28, 0.5);
     animation: statePulse 2.4s ease-in-out infinite;
     text-transform: uppercase;
+    line-height: 1.4;
   }
   @keyframes statePulse {
     0%, 100% {
+      color: var(--amber);
       text-shadow:
-        0 0 8px rgba(255, 40, 60, 0.9),
-        0 0 20px rgba(255, 40, 60, 0.5);
+        0 0 8px rgba(255, 159, 28, 0.9),
+        0 0 20px rgba(255, 159, 28, 0.5);
     }
     50% {
+      color: var(--amber-2);
       text-shadow:
-        0 0 12px rgba(255, 40, 60, 1),
-        0 0 32px rgba(255, 40, 60, 0.8),
-        0 0 48px rgba(255, 40, 60, 0.4);
+        0 0 12px rgba(255, 159, 28, 1),
+        0 0 32px rgba(255, 159, 28, 0.8),
+        0 0 48px rgba(255, 159, 28, 0.4);
+    }
+  }
+
+  /* State colors override */
+  #state.ok   {
+    color: var(--ok);
+    text-shadow: 0 0 10px rgba(74, 222, 128, 0.9), 0 0 24px rgba(74, 222, 128, 0.5);
+    animation: none;
+  }
+  #state.bad  {
+    color: var(--bad);
+    text-shadow: 0 0 10px rgba(255, 77, 94, 1), 0 0 24px rgba(255, 77, 94, 0.7);
+    animation: none;
+  }
+  #state.warn {
+    color: var(--amber);
+    text-shadow: 0 0 10px rgba(255, 159, 28, 1), 0 0 24px rgba(255, 159, 28, 0.7);
+  }
+
+  /* Hint "klik X" — dengan animasi tap */
+  #state.tap {
+    animation: tapPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes tapPulse {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.7;
+      transform: scale(1.03);
     }
   }
 
@@ -238,6 +307,7 @@
     color: var(--muted);
     margin: 0 0 10px;
     letter-spacing: 0.04em;
+    line-height: 1.5;
   }
   #det b {
     color: #ffffff;
@@ -261,10 +331,19 @@
       0 0 16px rgba(255, 40, 60, 0.5);
   }
 
-  /* State colors */
-  #state.ok   { color: var(--ok);   text-shadow: 0 0 10px rgba(74, 222, 128, 0.9), 0 0 24px rgba(74, 222, 128, 0.5); }
-  #state.bad  { color: var(--bad);  text-shadow: 0 0 10px rgba(255, 77, 94, 1),   0 0 24px rgba(255, 77, 94, 0.7); }
-  #state.warn { color: var(--warn); text-shadow: 0 0 10px rgba(251, 191, 36, 1),  0 0 24px rgba(251, 191, 36, 0.7); }
+  /* Hint kecil di bawah card */
+  #hint {
+    font-size: 11px;
+    color: var(--dim);
+    margin-top: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  #hint b {
+    color: var(--amber);
+    font-weight: 700;
+    text-shadow: 0 0 8px rgba(255, 159, 28, 0.7);
+  }
 
   /* ===== FOOTER ===== */
   #footer {
@@ -279,6 +358,8 @@
     background: rgba(5, 7, 10, 0.85);
     border-top: 1px solid rgba(255, 40, 60, 0.25);
     flex-shrink: 0;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
   #footer b {
     color: #ffffff;
@@ -310,9 +391,8 @@
   /* ===== RESPONSIVE ===== */
   @media (max-width: 560px), (max-height: 600px) {
     #wrap { padding: 16px 12px; }
-    #card { padding: 24px 18px 20px; }
-    #state { font-size: 17px; }
-    .spinner { width: 46px; height: 46px; margin-bottom: 16px; }
+    #card { padding: 26px 18px 22px; }
+    #state { font-size: 18px; }
     #brand b { font-size: 16px; }
     #brand img { width: 32px; height: 32px; }
     #footer { font-size: 10px; padding: 8px 10px 10px; }
@@ -334,10 +414,10 @@
 
 <div id="wrap">
   <div id="card">
-    <div class="spinner"></div>
-    <div id="state">detecting firmware...</div>
+    <div id="state">memeriksa firmware...</div>
     <div id="det"></div>
     <div id="cache"></div>
+    <div id="hint">JANGAN JALANKAN PROSES LAGI SETELAH PROSES BERHASIL</div>
   </div>
 </div>
 
@@ -364,16 +444,16 @@
     var stateEl = document.getElementById("state");
     var detEl = document.getElementById("det");
     var cacheEl = document.getElementById("cache");
+    var hintEl = document.getElementById("hint");
+
     function setState(t, c) { stateEl.textContent = t; stateEl.className = c || ""; }
     function setCache(t, ok) { cacheEl.textContent = t; cacheEl.className = ok ? "cacheok" : ""; }
+    function showHint(v) { hintEl.style.display = v ? "block" : "none"; }
+
     var params = new URLSearchParams(location.search);
 
-    // Firmwares this build has a MEASURED kernel table for. jb.js still runs its
-    // own kernel-table-present gate, so this is UX only -- an unlisted firmware
-    // can still be launched with a tap. KEEP IN SYNC with ps4_offsets.js: add a
-    // fwnum here in the SAME commit that fills that firmware's kernel RVAs.
-    // The PS4 reports its minor as two hex digits in the UA (13.52 -> minor 0x52).
-    var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 }; // all measured on hardware
+    // Firmwares this build has a MEASURED kernel table for.
+    var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 };
 
     var key = null, fwnum = null;
     var m = /PlayStation\s+4[\/ ](\d+)\.(\d+)/.exec(navigator.userAgent);
@@ -386,75 +466,96 @@
 
     var forced = params.get("force") === "1";
     var supported = forced || (fwnum !== null && SUPPORTED[fwnum] === 1);
+
     detEl.innerHTML = "firmware <b>" + (key || "unknown") + "</b>"
-        + (supported ? " &middot; <b>supported</b>"
-                     : " &middot; not in this build's kernel table");
+        + (supported ? " &middot; <b>didukung</b>"
+                     : " &middot; belum teruji di build ini");
 
     var target = "jb.html" + location.search;
-    function go() { setState("loading jailbreak...", "warn"); location.replace(target); }
 
+    // WAJIB KLIK X / TAP
     function waitForTap(msg, action) {
-        setState(msg, "warn");
+        setState(msg, "warn tap");
+        showHint(true);
         function fire() {
             window.removeEventListener("click", fire);
             window.removeEventListener("keydown", fire);
+            showHint(false);
             action();
         }
         window.addEventListener("click", fire);
         window.addEventListener("keydown", fire);
     }
 
-    // Off-target consoles are not launched automatically -- one tap still runs
-    // it, so a user-agent quirk on the real 13.52 console can never lock it out.
+    function go() {
+        setState("memuat jailbreak...", "warn");
+        location.replace(target);
+    }
+
+    // Cek firmware dulu
     if (!supported) {
-        setState("UNSUPPORTED FIRMWARE", "bad");
-        waitForTap("UNSUPPORTED (" + (key || "unknown") + ") -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+        setState("FIRMWARE BELUM TERUJI", "bad");
+        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
         return;
     }
 
+    // Firmware didukung → cek cache → SELALU minta klik X
     var ac = window.applicationCache;
+
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
-        go();
+        setCache("cache tidak tersedia");
+        setState("SIAP DIMULAI", "ok");
+        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
     } else if (!navigator.onLine) {
-        setCache("offline -- from cache", true);
-        go();
+        setCache("offline -- dari cache", true);
+        setState("SIAP DIMULAI", "ok");
+        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
     } else if (ac.status === ac.IDLE) {
-        setCache("cached", true);
-        go();
+        setCache("siap offline", true);
+        setState("SIAP DIMULAI", "ok");
+        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
-        setCache("update downloaded", true);
-        waitForTap("UPDATE READY -- Klik X Untuk Membuka Game Yang Terkunci..!",
-                   function () { location.reload(); });
+        setCache("update terunduh", true);
+        setState("SIAP DIMULAI", "ok");
+        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
     } else {
-        setCache("checking cache...");
+        // Sedang menyimpan cache
+        setCache("menyimpan cache...");
+        setState("MENYIMPAN CACHE...", "warn");
+        showHint(false);
+
         ac.addEventListener("downloading",
-            function () { setCache("caching for offline (first run)..."); }, false);
+            function () { setCache("menyimpan cache (pertama kali)..."); }, false);
         ac.addEventListener("progress", function (e) {
             if (e && e.total)
-                setCache("caching " + Math.round((e.loaded / e.total) * 100) + "%");
+                setCache("menyimpan cache " + Math.round((e.loaded / e.total) * 100) + "%");
         }, false);
         ac.addEventListener("cached", function () {
-            setCache("cached for offline use", true);
-            waitForTap("CACHED (first run) -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+            setCache("tersimpan untuk offline", true);
+            setState("SIAP DIMULAI", "ok");
+            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
         }, false);
         ac.addEventListener("updateready", function () {
             try { ac.swapCache(); } catch (e) {}
-            setCache("update downloaded", true);
-            waitForTap("UPDATE READY -- Klik X Untuk Membuka Game Yang Terkunci..!",
-                       function () { location.reload(); });
+            setCache("update terunduh", true);
+            setState("SIAP DIMULAI", "ok");
+            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
         }, false);
         ac.addEventListener("noupdate", function () {
-            setCache("cached -- offline ready", true);
-            go();
+            setCache("siap offline", true);
+            setState("SIAP DIMULAI", "ok");
+            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
         }, false);
         ac.addEventListener("error", function () {
-            setCache("cache unavailable");
-            waitForTap("CACHE FAILED -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+            setCache("cache gagal");
+            setState("SIAP DIMULAI", "ok");
+            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
         }, false);
         ac.addEventListener("obsolete", function () {
-            setCache("cache obsolete");
-            waitForTap("CACHE OBSOLETE -- Klik X Untuk Membuka Game Yang Terkunci..!", go);
+            setCache("cache usang");
+            setState("SIAP DIMULAI", "ok");
+            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
         }, false);
     }
 })();
