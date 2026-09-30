@@ -55,10 +55,10 @@ function finishUI(ok) {
   const m = document.getElementById("msg");
   if (m)
     m.textContent = ok
-      ? "DONE"
+      ? "Buka Game Berhasil, Tekan O Untuk Keluar"
       : armedEver
-        ? "Restart your console"
-        : "Refresh the page and run again";
+        ? "Restart PS4, Kemudian Jalankan Ulang Proses Buka Gamenya"
+        : "Refresh Web dan Jalankan Ulang";
   document.body.className = ok ? "done" : "fail";
 }
 function mark(tag, detail) {
