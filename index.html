@@ -32,18 +32,14 @@
     font: 15px/1.5 "Segoe UI", system-ui, -apple-system, sans-serif;
   }
 
-  /* ===== BACKGROUND LAYER ===== */
   body {
     background-color: var(--bg);
     background-image:
-      /* Radial glow merah di 3 titik */
       radial-gradient(ellipse 60% 50% at 15% 10%, rgba(255, 40, 60, 0.18), transparent 60%),
       radial-gradient(ellipse 60% 50% at 85% 90%, rgba(255, 0, 80, 0.15), transparent 60%),
       radial-gradient(ellipse 80% 60% at 50% 50%, rgba(255, 60, 0, 0.08), transparent 70%),
-      /* Grid pattern diagonal */
       linear-gradient(rgba(255, 40, 60, 0.04) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 40, 60, 0.04) 1px, transparent 1px),
-      /* Dot pattern */
       radial-gradient(rgba(255, 40, 60, 0.08) 1px, transparent 1px);
     background-size:
       100% 100%,
@@ -58,7 +54,6 @@
     position: relative;
   }
 
-  /* Scanline halus (efek CRT) */
   body::before {
     content: "";
     position: fixed;
@@ -74,7 +69,6 @@
     z-index: 1;
   }
 
-  /* Glow bergerak di background (animasi) */
   body::after {
     content: "";
     position: fixed;
@@ -170,7 +164,7 @@
     justify-content: center;
     align-items: center;
     flex: 1 1 auto;
-    padding: 24px 18px;
+    padding: 20px 18px;
     min-height: 0;
   }
 
@@ -181,7 +175,7 @@
     text-align: center;
     border: 1px solid rgba(255, 40, 60, 0.35);
     border-radius: 16px;
-    padding: 36px 24px 32px;
+    padding: 30px 24px 26px;
     background: linear-gradient(
       180deg,
       rgba(14, 17, 24, 0.95) 0%,
@@ -211,21 +205,6 @@
       transparent 100%
     );
   }
-  /* Garis dekoratif di kiri & kanan card */
-  #card::after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 20%;
-    right: 20%;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 40, 60, 0.5),
-      transparent
-    );
-  }
   @keyframes cardPulse {
     0%, 100% {
       box-shadow:
@@ -241,12 +220,88 @@
     }
   }
 
-  /* ===== STATE TEXT (tanpa spinner) ===== */
+  /* ===== WARNING BANNER (SEDERHANA) ===== */
+  .warning-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 40, 60, 0.18) 0%,
+      rgba(255, 77, 94, 0.12) 100%
+    );
+    border: 1.5px solid var(--bad);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 22px;
+    box-shadow:
+      0 0 24px rgba(255, 40, 60, 0.35),
+      0 0 48px rgba(255, 40, 60, 0.15),
+      0 0 0 1px rgba(255, 40, 60, 0.2) inset;
+    animation: warningPulse 2s ease-in-out infinite;
+    text-align: center;
+  }
+  @keyframes warningPulse {
+    0%, 100% {
+      box-shadow:
+        0 0 24px rgba(255, 40, 60, 0.35),
+        0 0 48px rgba(255, 40, 60, 0.15),
+        0 0 0 1px rgba(255, 40, 60, 0.2) inset;
+      border-color: var(--bad);
+    }
+    50% {
+      box-shadow:
+        0 0 40px rgba(255, 40, 60, 0.6),
+        0 0 80px rgba(255, 40, 60, 0.3),
+        0 0 0 1px rgba(255, 40, 60, 0.3) inset;
+      border-color: #ff6b7a;
+    }
+  }
+  .warning-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 40, 60, 0.2);
+    border: 2px solid var(--bad);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--bad);
+    text-shadow: 0 0 10px rgba(255, 77, 94, 1);
+    animation: iconShake 2s ease-in-out infinite;
+  }
+  @keyframes iconShake {
+    0%, 100% { transform: rotate(0deg); }
+    10% { transform: rotate(-8deg); }
+    20% { transform: rotate(8deg); }
+    30% { transform: rotate(-8deg); }
+    40% { transform: rotate(8deg); }
+    50%, 100% { transform: rotate(0deg); }
+  }
+  .warning-text {
+    flex: 1;
+    text-align: center;
+  }
+  .warning-title {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--bad);
+    text-transform: uppercase;
+    text-shadow: 0 0 8px rgba(255, 77, 94, 0.9);
+    line-height: 1.4;
+  }
+
+  /* ===== STATE TEXT ===== */
   #state {
-    font-size: 22px;
+    font-size: 20px;
     font-weight: 800;
     letter-spacing: 0.08em;
-    margin: 0 0 14px;
+    margin: 0 0 12px;
     color: var(--amber);
     text-shadow:
       0 0 8px rgba(255, 159, 28, 0.9),
@@ -271,7 +326,6 @@
     }
   }
 
-  /* State colors override */
   #state.ok   {
     color: var(--ok);
     text-shadow: 0 0 10px rgba(74, 222, 128, 0.9), 0 0 24px rgba(74, 222, 128, 0.5);
@@ -286,20 +340,12 @@
     color: var(--amber);
     text-shadow: 0 0 10px rgba(255, 159, 28, 1), 0 0 24px rgba(255, 159, 28, 0.7);
   }
-
-  /* Hint "klik X" — dengan animasi tap */
   #state.tap {
     animation: tapPulse 1.5s ease-in-out infinite;
   }
   @keyframes tapPulse {
-    0%, 100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.7;
-      transform: scale(1.03);
-    }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.03); }
   }
 
   #det {
@@ -331,13 +377,13 @@
       0 0 16px rgba(255, 40, 60, 0.5);
   }
 
-  /* Hint kecil di bawah card */
   #hint {
     font-size: 11px;
     color: var(--dim);
     margin-top: 16px;
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    line-height: 1.6;
   }
   #hint b {
     color: var(--amber);
@@ -388,15 +434,17 @@
     border-bottom-color: var(--accent-2);
   }
 
-  /* ===== RESPONSIVE ===== */
   @media (max-width: 560px), (max-height: 600px) {
-    #wrap { padding: 16px 12px; }
-    #card { padding: 26px 18px 22px; }
-    #state { font-size: 18px; }
+    #wrap { padding: 14px 12px; }
+    #card { padding: 22px 16px 20px; }
+    #state { font-size: 17px; }
     #brand b { font-size: 16px; }
     #brand img { width: 32px; height: 32px; }
     #footer { font-size: 10px; padding: 8px 10px 10px; }
     #footer .row { white-space: normal; }
+    .warning-banner { padding: 12px 14px; margin-bottom: 16px; }
+    .warning-icon { width: 28px; height: 28px; font-size: 16px; }
+    .warning-title { font-size: 11px; }
   }
 </style>
 </head>
@@ -414,10 +462,19 @@
 
 <div id="wrap">
   <div id="card">
+
+    <!-- WARNING BANNER -->
+    <div class="warning-banner">
+      <div class="warning-icon">!</div>
+      <div class="warning-text">
+        <div class="warning-title">DILARANG MENGONEKSIKAN PS4 KE INTERNET!!!</div>
+      </div>
+    </div>
+
     <div id="state">memeriksa firmware...</div>
     <div id="det"></div>
     <div id="cache"></div>
-    <div id="hint">DILARANG MENGONEKSIKAN PS4 KE INTERNET..!!</div>
+    <div id="hint">Jika Ada Kendala, Hubungi Admin!!</div>
   </div>
 </div>
 
@@ -452,7 +509,6 @@
 
     var params = new URLSearchParams(location.search);
 
-    // Firmwares this build has a MEASURED kernel table for.
     var SUPPORTED = { 1302: 1, 1304: 1, 1350: 1, 1352: 1 };
 
     var key = null, fwnum = null;
@@ -473,7 +529,6 @@
 
     var target = "jb.html" + location.search;
 
-    // WAJIB KLIK X / TAP
     function waitForTap(msg, action) {
         setState(msg, "warn tap");
         showHint(true);
@@ -492,35 +547,32 @@
         location.replace(target);
     }
 
-    // Cek firmware dulu
     if (!supported) {
         setState("FIRMWARE BELUM TERUJI", "bad");
-        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+        waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
         return;
     }
 
-    // Firmware didukung → cek cache → SELALU minta klik X
     var ac = window.applicationCache;
 
     if (!ac || !document.documentElement.hasAttribute("manifest")) {
         setCache("cache tidak tersedia");
         setState("SIAP DIMULAI", "ok");
-        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+        waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
     } else if (!navigator.onLine) {
         setCache("offline -- dari cache", true);
         setState("SIAP DIMULAI", "ok");
-        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+        waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
     } else if (ac.status === ac.IDLE) {
         setCache("siap offline", true);
         setState("SIAP DIMULAI", "ok");
-        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+        waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
     } else if (ac.status === ac.UPDATEREADY) {
         try { ac.swapCache(); } catch (e) {}
         setCache("update terunduh", true);
         setState("SIAP DIMULAI", "ok");
-        waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+        waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
     } else {
-        // Sedang menyimpan cache
         setCache("menyimpan cache...");
         setState("MENYIMPAN CACHE...", "warn");
         showHint(false);
@@ -534,28 +586,28 @@
         ac.addEventListener("cached", function () {
             setCache("tersimpan untuk offline", true);
             setState("SIAP DIMULAI", "ok");
-            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+            waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
         }, false);
         ac.addEventListener("updateready", function () {
             try { ac.swapCache(); } catch (e) {}
             setCache("update terunduh", true);
             setState("SIAP DIMULAI", "ok");
-            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+            waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
         }, false);
         ac.addEventListener("noupdate", function () {
             setCache("siap offline", true);
             setState("SIAP DIMULAI", "ok");
-            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+            waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
         }, false);
         ac.addEventListener("error", function () {
             setCache("cache gagal");
             setState("SIAP DIMULAI", "ok");
-            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+            waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
         }, false);
         ac.addEventListener("obsolete", function () {
             setCache("cache usang");
             setState("SIAP DIMULAI", "ok");
-            waitForTap("TEKAN X UNTUK MEMBUKA KUNCI GAME", go);
+            waitForTap("TEKAN X UNTUK MEMBUKA GAME YANG TERKUNCI!!!", go);
         }, false);
     }
 })();
