@@ -55,7 +55,7 @@ function finishUI(ok) {
   const m = document.getElementById("msg");
   if (m)
     m.textContent = ok
-      ? "Buka Game Berhasil, Tekan O Untuk Keluar"
+      ? "Buka Game Berhasil, Klik (Bulat) Untuk Keluar"
       : armedEver
         ? "Restart PS4, Kemudian Jalankan Ulang Proses Buka Gamenya"
         : "Refresh Web dan Jalankan Ulang";
