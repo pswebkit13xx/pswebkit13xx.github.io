@@ -55,10 +55,10 @@ function finishUI(ok) {
   const m = document.getElementById("msg");
   if (m)
     m.textContent = ok
-      ? "Buka Game Berhasil, Klik (Bulat) Untuk Keluar"
+      ? "✓ Buka Game Berhasil, Klik (Bulat) Untuk Keluar"
       : armedEver
-        ? "Restart PS4, Kemudian Jalankan Ulang Proses Buka Gamenya"
-        : "Refresh Web dan Jalankan Ulang";
+        ? "✕ GAGAL!!! Restart PS4 dan Jalankan Ulang Prosesnya"
+        : "✕ GAGAL!!! Refresh Web dan Jalankan Ulang";
   document.body.className = ok ? "done" : "fail";
 }
 function mark(tag, detail) {
